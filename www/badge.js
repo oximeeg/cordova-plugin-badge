@@ -15,18 +15,22 @@
  * limitations under the License.
  */
 
-var exec      = require('cordova/exec'),
-    channel   = require('cordova/channel'),
-    ua        = navigator.userAgent.toLowerCase(),
-    isIOS     = ua.indexOf('ipad') > -1 || ua.indexOf('iphone') > -1,
-    isMac     = ua.indexOf('macintosh') > -1,
-    isWin     = window.Windows !== undefined,
-    isAndroid = !isWin && ua.indexOf('android') > -1,
-    isWinPC   = isWin && Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes('Desktop'),
-    isDesktop = isMac || isWinPC;
+var exec = require("cordova/exec"),
+  channel = require("cordova/channel"),
+  ua = navigator.userAgent.toLowerCase(),
+  isIOS = ua.indexOf("ipad") > -1 || ua.indexOf("iphone") > -1,
+  isMac = ua.indexOf("macintosh") > -1,
+  isWin = window.Windows !== undefined,
+  isAndroid = !isWin && ua.indexOf("android") > -1,
+  isWinPC =
+    isWin &&
+    Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily.includes(
+      "Desktop"
+    ),
+  isDesktop = isMac || isWinPC;
 
 // Default settings
-exports._config = { indicator: 'badge', autoClear: false };
+exports._config = { indicator: "badge", autoClear: false };
 
 /**
  * Clears the badge number.
@@ -37,7 +41,7 @@ exports._config = { indicator: 'badge', autoClear: false };
  * @return [ Void ]
  */
 exports.clear = function (callback, scope) {
-    this.exec('clear', null, callback, scope);
+  this.exec("clear", null, callback, scope);
 };
 
 /**
@@ -50,13 +54,13 @@ exports.clear = function (callback, scope) {
  * @return [ Void ]
  */
 exports.set = function (badge, callback, scope) {
-    var args = [parseInt(badge) || 0];
+  var args = [parseInt(badge) || 0];
 
-    this.requestPermission(function (granted) {
-        if (granted) {
-            this.exec('set', args, callback, scope);
-        }
-    }, this);
+  this.requestPermission(function (granted) {
+    if (granted) {
+      this.exec("set", args, callback, scope);
+    }
+  }, this);
 };
 
 /**
@@ -68,7 +72,7 @@ exports.set = function (badge, callback, scope) {
  * @return [ Void ]
  */
 exports.get = function (callback, scope) {
-    this.exec('get', null, callback, scope);
+  this.exec("get", null, callback, scope);
 };
 
 /**
@@ -81,9 +85,9 @@ exports.get = function (callback, scope) {
  * @return [ Void ]
  */
 exports.increase = function (count, callback, scope) {
-    this.get(function (badge) {
-        this.set(badge + (count || 1), callback, scope);
-    }, this);
+  this.get(function (badge) {
+    this.set(badge + (count || 1), callback, scope);
+  }, this);
 };
 
 /**
@@ -96,9 +100,9 @@ exports.increase = function (count, callback, scope) {
  * @return [ Void ]
  */
 exports.decrease = function (count, callback, scope) {
-    this.get(function (badge) {
-        this.set(Math.max(0, badge - (count || 1)), callback, scope);
-    }, this);
+  this.get(function (badge) {
+    this.set(Math.max(0, badge - (count || 1)), callback, scope);
+  }, this);
 };
 
 /**
@@ -110,11 +114,11 @@ exports.decrease = function (count, callback, scope) {
  * @return [ Void ]
  */
 exports.isSupported = function (callback, scope) {
-    if (isAndroid) {
-        this.exec('check', null, callback, scope);
-    } else {
-        this.createCallbackFn(callback, scope)(true);
-    }
+  if (isAndroid) {
+    this.exec("check", null, callback, scope);
+  } else {
+    this.createCallbackFn(callback, scope)(true);
+  }
 };
 
 /**
@@ -126,11 +130,11 @@ exports.isSupported = function (callback, scope) {
  * @return [ Void ]
  */
 exports.hasPermission = function (callback, scope) {
-    if (isIOS) {
-        this.exec('check', null, callback, scope);
-    } else {
-        this.createCallbackFn(callback, scope)(true);
-    }
+  if (isIOS) {
+    this.exec("check", null, callback, scope);
+  } else {
+    this.createCallbackFn(callback, scope)(true);
+  }
 };
 
 /**
@@ -142,11 +146,11 @@ exports.hasPermission = function (callback, scope) {
  * @return [ Void ]
  */
 exports.requestPermission = function (callback, scope) {
-    if (isIOS) {
-        this.exec('request', null, callback, scope);
-    } else {
-        this.createCallbackFn(callback, scope)(true);
-    }
+  if (isIOS) {
+    this.exec("request", null, callback, scope);
+  } else {
+    this.createCallbackFn(callback, scope)(true);
+  }
 };
 
 /**
@@ -157,10 +161,10 @@ exports.requestPermission = function (callback, scope) {
  * @return [ Hash ] The merged config settings.
  */
 exports.configure = function (config) {
-    this.mergeConfig(config);
-    this.exec('save', this._config);
+  this.mergeConfig(config);
+  this.exec("save", this._config);
 
-    return this._config;
+  return this._config;
 };
 
 /**
@@ -171,7 +175,7 @@ exports.configure = function (config) {
  * @return [ Hash ] The merged config settings.
  */
 exports.mergeConfig = function (config) {
-    return Object.assign(this._config, config);
+  return Object.assign(this._config, config);
 };
 
 /**
@@ -183,12 +187,11 @@ exports.mergeConfig = function (config) {
  * @return [ Function ] The new callback function
  */
 exports.createCallbackFn = function (callbackFn, scope) {
-    if (typeof callbackFn != 'function')
-        return;
+  if (typeof callbackFn != "function") return;
 
-    return function () {
-        callbackFn.apply(scope || this, arguments);
-    };
+  return function () {
+    callbackFn.apply(scope || this, arguments);
+  };
 };
 
 /**
@@ -197,9 +200,9 @@ exports.createCallbackFn = function (callbackFn, scope) {
  * @return [ Void ]
  */
 exports.clearIf = function () {
-    if (this._config.autoClear && this._config.indicator == 'badge') {
-        this.clear();
-    }
+  if (this._config.autoClear && this._config.indicator == "badge") {
+    this.clear();
+  }
 };
 
 /**
@@ -213,54 +216,69 @@ exports.clearIf = function () {
  * @return [ Void ]
  */
 exports.exec = function (action, args, callback, scope) {
-    var fn     = this.createCallbackFn(callback, scope),
-        params = [];
+  var fn = this.createCallbackFn(callback, scope),
+    params = [];
 
-    if (Array.isArray(args)) {
-        params = args;
-    } else if (args) {
-        params.push(args);
-    }
+  if (Array.isArray(args)) {
+    params = args;
+  } else if (args) {
+    params.push(args);
+  }
 
-    exec(fn, null, 'Badge', action, params);
+  exec(fn, null, "Badge", action, params);
 };
 
 // Clear badge on app start if autoClear is set to true
 channel.onCordovaReady.subscribe(function () {
-    exports.exec('load', null, function (config) {
-        this.mergeConfig(config);
-        this.clearIf();
-    }, exports);
+  exports.exec(
+    "load",
+    null,
+    function (config) {
+      this.mergeConfig(config);
+      this.clearIf();
+    },
+    exports
+  );
 });
 
 // Clear badge on app resume if autoClear is set to true
 channel.onResume.subscribe(function () {
-    exports.clearIf();
+  exports.clearIf();
 });
 
 // Clear badge on app resume if autoClear is set to true
 channel.onActivated.subscribe(function () {
-    exports.clearIf();
+  exports.clearIf();
 });
 
 if (isDesktop) {
-    // Clear badge on app resume if autoClear is set to true
-    document.addEventListener('visibilitychange', function () {
-        if (!document.hidden) { exports.clearIf(); }
-    }, false);
-
-    // Clear badge on app resume if autoClear is set to true
-    window.addEventListener('focus', function () {
+  // Clear badge on app resume if autoClear is set to true
+  document.addEventListener(
+    "visibilitychange",
+    function () {
+      if (!document.hidden) {
         exports.clearIf();
-    }, false);
+      }
+    },
+    false
+  );
+
+  // Clear badge on app resume if autoClear is set to true
+  window.addEventListener(
+    "focus",
+    function () {
+      exports.clearIf();
+    },
+    false
+  );
 }
 
 // Polyfill for Object.assign
-if (typeof Object.assign != 'function') {
-  Object.assign = function(target) {
-    'use strict';
+if (typeof Object.assign != "function") {
+  Object.assign = function (target) {
+    "use strict";
     if (target == null) {
-      throw new TypeError('Cannot convert undefined or null to object');
+      throw new TypeError("Cannot convert undefined or null to object");
     }
 
     target = Object(target);

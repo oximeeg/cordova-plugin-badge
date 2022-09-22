@@ -20,18 +20,18 @@
 @interface APPBadge : CDVPlugin
 
 // Load the badge config
-- (void) load:(CDVInvokedUrlCommand *)command;
+- (void)load:(CDVInvokedUrlCommand *)command;
 // Save the badge config
-- (void) save:(CDVInvokedUrlCommand *)command;
+- (void)save:(CDVInvokedUrlCommand *)command;
 // Clear the badge number
-- (void) clear:(CDVInvokedUrlCommand *)command;
+- (void)clear:(CDVInvokedUrlCommand *)command;
 // Set the badge number
-- (void) set:(CDVInvokedUrlCommand *)command;
+- (void)set:(CDVInvokedUrlCommand *)command;
 // Get the badge number
-- (void) get:(CDVInvokedUrlCommand *)command;
+- (void)get:(CDVInvokedUrlCommand *)command;
 // Check permission to show badges
-- (void) check:(CDVInvokedUrlCommand *)command;
+- (void)check:(CDVInvokedUrlCommand *)command;
 // Request permission to show badges
-- (void) request:(CDVInvokedUrlCommand *)command;
+- (void)request:(CDVInvokedUrlCommand *)command;
 
 @end

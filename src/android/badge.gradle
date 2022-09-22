@@ -16,15 +16,15 @@
  */
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 if (!project.ext.has('appShortcutBadgerVersion')) {
-    ext.appShortcutBadgerVersion = '1.1.22'
+  ext.appShortcutBadgerVersion = '1.1.22'
 }
 
 if (!project.ext.has('appShortcutBadgerCustom')) {
-    dependencies {
-        implementation "me.leolin:ShortcutBadger:${appShortcutBadgerVersion}@aar"
-    }
+  dependencies {
+    implementation "me.leolin:ShortcutBadger:${appShortcutBadgerVersion}@aar"
+  }
 }

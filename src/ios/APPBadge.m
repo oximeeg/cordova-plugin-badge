@@ -21,7 +21,7 @@
 
 @implementation APPBadge
 
-static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
+static NSString *const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
 
 #pragma mark -
 #pragma mark Interface
@@ -29,117 +29,109 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
 /**
  * Load the badge config.
  */
-- (void) load:(CDVInvokedUrlCommand *)command
-{
-    [self.commandDelegate runInBackground:^{
-        NSDictionary *config = [self.settings objectForKey:kAPPBadgeConfigKey];
+- (void)load:(CDVInvokedUrlCommand *)command {
+  [self.commandDelegate runInBackground:^{
+    NSDictionary *config = [self.settings objectForKey:kAPPBadgeConfigKey];
 
-        CDVPluginResult* result;
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsDictionary:config];
+    CDVPluginResult *result;
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                           messageAsDictionary:config];
 
-        [self.commandDelegate sendPluginResult:result
-                                    callbackId:command.callbackId];
-    }];
+    [self.commandDelegate sendPluginResult:result
+                                callbackId:command.callbackId];
+  }];
 }
 
 /**
  * Save the badge config.
  */
-- (void) save:(CDVInvokedUrlCommand *)command
-{
-    [self.commandDelegate runInBackground:^{
-        [self.settings setObject:[command argumentAtIndex:0]
-                          forKey:kAPPBadgeConfigKey];
-    }];
+- (void)save:(CDVInvokedUrlCommand *)command {
+  [self.commandDelegate runInBackground:^{
+    [self.settings setObject:[command argumentAtIndex:0]
+                      forKey:kAPPBadgeConfigKey];
+  }];
 }
 
 /**
  * Clear the badge number.
  */
-- (void) clear:(CDVInvokedUrlCommand *)command
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.app setApplicationIconBadgeNumber:0];
+- (void)clear:(CDVInvokedUrlCommand *)command {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.app setApplicationIconBadgeNumber:0];
 
-        [self sendPluginResult:CDVCommandStatus_OK
-                 messageAsLong:0
-                    callbackId:command.callbackId];
-    });
+    [self sendPluginResult:CDVCommandStatus_OK
+             messageAsLong:0
+                callbackId:command.callbackId];
+  });
 }
 
 /**
  * Set the badge number.
  */
-- (void) set:(CDVInvokedUrlCommand *)command
-{
-    NSArray* args = [command arguments];
-    int number    = [[args objectAtIndex:0] intValue];
+- (void)set:(CDVInvokedUrlCommand *)command {
+  NSArray *args = [command arguments];
+  int number = [[args objectAtIndex:0] intValue];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.app setApplicationIconBadgeNumber:number];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.app setApplicationIconBadgeNumber:number];
 
-        [self sendPluginResult:CDVCommandStatus_OK
-                 messageAsLong:number
-                    callbackId:command.callbackId];
-    });
+    [self sendPluginResult:CDVCommandStatus_OK
+             messageAsLong:number
+                callbackId:command.callbackId];
+  });
 }
 
 /**
  * Get the badge number.
  */
-- (void) get:(CDVInvokedUrlCommand *)command
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        long badge = [self.app applicationIconBadgeNumber];
+- (void)get:(CDVInvokedUrlCommand *)command {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    long badge = [self.app applicationIconBadgeNumber];
 
-        [self sendPluginResult:CDVCommandStatus_OK
-                 messageAsLong:badge
-                    callbackId:command.callbackId];
-    });
+    [self sendPluginResult:CDVCommandStatus_OK
+             messageAsLong:badge
+                callbackId:command.callbackId];
+  });
 }
 
 /**
  * Check permission to show badges.
  */
-- (void) check:(CDVInvokedUrlCommand *)command
-{
-    [self.commandDelegate runInBackground:^{
-        UNUserNotificationCenter *center =
+- (void)check:(CDVInvokedUrlCommand *)command {
+  [self.commandDelegate runInBackground:^{
+    UNUserNotificationCenter *center =
         UNUserNotificationCenter.currentNotificationCenter;
 
-        [center getNotificationSettingsWithCompletionHandler:
-         ^(UNNotificationSettings* settings) {
-             BOOL authorized =
-             settings.authorizationStatus == UNAuthorizationStatusAuthorized;
-             BOOL enabled =
-             settings.badgeSetting == UNNotificationSettingEnabled;
+    [center getNotificationSettingsWithCompletionHandler:^(
+                UNNotificationSettings *settings) {
+      BOOL authorized =
+          settings.authorizationStatus == UNAuthorizationStatusAuthorized;
+      BOOL enabled = settings.badgeSetting == UNNotificationSettingEnabled;
 
-             [self sendPluginResult:CDVCommandStatus_OK
-                      messageAsBool:authorized && enabled
-                         callbackId:command.callbackId];
-        }];
+      [self sendPluginResult:CDVCommandStatus_OK
+               messageAsBool:authorized && enabled
+                  callbackId:command.callbackId];
     }];
+  }];
 }
 
 /**
  * Request permission to show badges.
  */
-- (void) request:(CDVInvokedUrlCommand *)command
-{
-    [self.commandDelegate runInBackground:^{
-        UNUserNotificationCenter *center =
+- (void)request:(CDVInvokedUrlCommand *)command {
+  [self.commandDelegate runInBackground:^{
+    UNUserNotificationCenter *center =
         UNUserNotificationCenter.currentNotificationCenter;
 
-        UNAuthorizationOptions options = UNAuthorizationOptionBadge;
+    UNAuthorizationOptions options = UNAuthorizationOptionBadge;
 
-        [center requestAuthorizationWithOptions:options
-                              completionHandler:^(BOOL granted, NSError* e) {
-                                  [self sendPluginResult:CDVCommandStatus_OK
-                                           messageAsBool:granted
-                                              callbackId:command.callbackId];
-        }];
-    }];
+    [center requestAuthorizationWithOptions:options
+                          completionHandler:^(BOOL granted, NSError *e) {
+                            [self sendPluginResult:CDVCommandStatus_OK
+                                     messageAsBool:granted
+                                        callbackId:command.callbackId];
+                          }];
+  }];
 }
 
 #pragma mark -
@@ -148,49 +140,43 @@ static NSString * const kAPPBadgeConfigKey = @"APPBadgeConfigKey";
 /**
  * Short hand for shared application instance.
  */
-- (UIApplication*) app
-{
-    return [UIApplication sharedApplication];
+- (UIApplication *)app {
+  return [UIApplication sharedApplication];
 }
 
 /**
  * Short hand for standard user defaults instance.
  */
-- (NSUserDefaults*) settings
-{
-    return [NSUserDefaults standardUserDefaults];
+- (NSUserDefaults *)settings {
+  return [NSUserDefaults standardUserDefaults];
 }
 
 /**
  * Sends a plugin result with the specified status and message.
  */
-- (void) sendPluginResult:(CDVCommandStatus)status
-            messageAsBool:(BOOL)msg
-               callbackId:(NSString*)callbackId
-{
-    CDVPluginResult* result;
+- (void)sendPluginResult:(CDVCommandStatus)status
+           messageAsBool:(BOOL)msg
+              callbackId:(NSString *)callbackId {
+  CDVPluginResult *result;
 
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                 messageAsBool:msg];
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                               messageAsBool:msg];
 
-    [self.commandDelegate sendPluginResult:result
-                                callbackId:callbackId];
+  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 /**
  * Sends a plugin result with the specified status and message.
  */
-- (void) sendPluginResult:(CDVCommandStatus)status
-            messageAsLong:(long)msg
-               callbackId:(NSString*)callbackId
-{
-    CDVPluginResult* result;
+- (void)sendPluginResult:(CDVCommandStatus)status
+           messageAsLong:(long)msg
+              callbackId:(NSString *)callbackId {
+  CDVPluginResult *result;
 
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                 messageAsDouble:msg];
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                             messageAsDouble:msg];
 
-    [self.commandDelegate sendPluginResult:result
-                                callbackId:callbackId];
+  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 @end

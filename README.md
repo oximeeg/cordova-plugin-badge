@@ -1,9 +1,8 @@
-
 <p align="left"><b><a href="https://github.com/katzer/cordova-plugin-badge/tree/example">SAMPLE APP</a> :point_right:</b></p>
 
 # Cordova Badge Plugin <br> [![npm version](https://badge.fury.io/js/cordova-plugin-badge.svg)](https://badge.fury.io/js/cordova-plugin-badge) [![Code Climate](https://codeclimate.com/github/katzer/cordova-plugin-badge/badges/gpa.svg)](https://codeclimate.com/github/katzer/cordova-plugin-badge) [![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L3HKQCD9UA35A "Donate once-off to this project using Paypal")
 
-[Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS, Android and Windows.
+[Cordova][cordova] plugin to access and modify the badge number of the app icon on various mobile platforms including iOS and Android.
 
 <img height="150px" align="right" hspace="19" vspace="12" src="http://4.bp.blogspot.com/-GBwBSN92DvU/UB8Kut7Oz0I/AAAAAAAAJKs/mJgBmj1RKqU/s1600/whatsapp+wp8+10.png"></img>
 
@@ -12,21 +11,16 @@
 Users see notifications in the following ways:
 
 - Badging the app’s icon
-- Progress indicator (OSX based on https://github.com/hokein/DockProgressBar)
-
+- Progress indicator
 
 ### Supported Platforms
 
-- __Android / Amazon FireOS__ (via [ShortcutBadger][shortcut_badger])
-- __Browser__ (via [favico.js][favico_js])
-- __iOS 10+__
-- __OSX__
-- __Windows__ (Phone and Desktop)
-
+- **Android / Amazon FireOS** (via [ShortcutBadger][shortcut_badger])
+- **iOS 10+**
 
 ## Installation
 
-The plugin can be installed via [Cordova-CLI][CLI] and is publicly available on [NPM][npm].
+The plugin can be installed via [Cordova-CLI][cli] and is publicly available on [NPM][npm].
 
 Execute from the projects root folder:
 
@@ -44,15 +38,18 @@ Or install from local source:
 
     $ cordova plugin add <path> --nofetch --nosave
 
-
 ## Usage
 
-The plugin creates the object `cordova.plugins.notification.badge` and is accessible after *deviceready* has been fired.
+The plugin creates the object `cordova.plugins.notification.badge` and is accessible after _deviceready_ has been fired.
 
 ```js
-document.addEventListener('deviceready', function () {
+document.addEventListener(
+  "deviceready",
+  function () {
     // cordova.plugins.notification.badge is now available
-}, false);
+  },
+  false
+);
 ```
 
 ### Set the badge number
@@ -68,15 +65,13 @@ cordova.plugins.notification.badge.set(10);
     <img height="150px" src="images/ios.png">
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img height="150px" src="images/android.png">
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <img height="150px" src="images/windows.png">
 </p>
 
 There's built-in support to increase the badge number:
 
 ```js
 cordova.plugins.notification.badge.increase(1, function (badge) {
-    // badge is now 11 (10 + 1)
+  // badge is now 11 (10 + 1)
 });
 ```
 
@@ -84,7 +79,7 @@ To decrease the badge number:
 
 ```js
 cordova.plugins.notification.badge.decrease(2, function (badge) {
-    // badge is now 9 (11 - 2)
+  // badge is now 9 (11 - 2)
 });
 ```
 
@@ -104,7 +99,7 @@ cordova.plugins.notification.badge.get(function (badge) {
 });
 ```
 
-__Note:__ Modifying the badge number outside of the plugin does result into wrong behaivor!
+**Note:** Modifying the badge number outside of the plugin does result into wrong behaivor!
 
 ### Configurations
 
@@ -113,21 +108,6 @@ To clear the badge number automatically if the user taps the app icon:
 ```js
 cordova.plugins.notification.badge.configure({ autoClear: true });
 ```
-
-OSX supports additional indicators. Other than to `badge` these are `circular` and `download`.
-
-```js
-cordova.plugins.notification.badge.configure({ indicator: 'circular' });
-```
-
-<p align="center">
-    <img src="images/osx-badge.png">
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="images/osx-circular.png">
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="images/osx-download.png">
-</p>
-
 
 ## Permissions
 
@@ -152,7 +132,6 @@ cordova.plugins.notification.badge.hasPermission(function (granted) {
 });
 ```
 
-
 ## Quirks
 
 On Android not all launchers support badges. In order to set badges the plugin uses [ShortcutBadger][shortcut_badger]. Check out their website to see which launchers are supported.
@@ -170,7 +149,6 @@ To specify a custom version of _ShortcutBadger_ follow this [guide][gradle-guide
 appShortcutBadgerVersion=1.1.22
 ```
 
-
 ## Contributing
 
 1. Fork it
@@ -178,7 +156,6 @@ appShortcutBadgerVersion=1.1.22
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
 
 ## License
 
@@ -188,11 +165,10 @@ Made with :yum: from Leipzig
 
 © 2013 [appPlant GmbH][appplant]
 
-
 [cordova]: https://cordova.apache.org
 [shortcut_badger]: https://github.com/leolin310148/ShortcutBadger
 [favico_js]: http://lab.ejci.net/favico.js/
-[CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
+[cli]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [npm]: https://www.npmjs.com/package/cordova-plugin-badge
 [gradle-guide]: https://cordova.apache.org/docs/en/latest/guide/platforms/android/#configuring-gradle
 [apache2_license]: http://opensource.org/licenses/Apache-2.0
